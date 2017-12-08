@@ -1,0 +1,25 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lei.lemonvideo.fragment.DetailListFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.lei.lemonvideo.widget.PullLoadRecycleView
+        android:id="@+id/pullLoadRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:numColumns="3"
+        android:overScrollMode="never">
+
+    </com.lei.lemonvideo.widget.PullLoadRecycleView>
+
+    <TextView
+        android:id="@+id/tv_show_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/data_failed_load" />
+
+</FrameLayout>

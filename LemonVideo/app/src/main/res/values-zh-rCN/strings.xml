@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">LemonVideo</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="channel_tv">TV</string>
+    <string name="channel_move">MOVE</string>
+    <string name="channel_comic">COMIC</string>
+    <string name="channel_documentary">DOCUMENTARY</string>
+    <string name="channel_music">MUSIC</string>
+    <string name="channel_variety">VARIETY</string>
+    <string name="channel_live">LIVE</string>
+    <string name="channel_favorite">FAVORITE</string>
+    <string name="channel_history">HISTORY</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="data_failed_load">data failed load</string>
+    <string name="data_is_loading">正在加载数据</string>
+    <string name="navigation_item_video">video</string>
+    <string name="navigation_item_about">about</string>
+    <string name="navigation_item_setting">setting</string>
+
+
+    <string name="site_letv">乐视视频</string>
+    <string name="site_sohu">搜狐视频</string>
+
+
+</resources>
