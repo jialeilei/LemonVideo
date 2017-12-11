@@ -9,7 +9,7 @@ import com.lei.lemonvideo.model.Site;
  */
 public class SiteApi {
 
-    public  void  onGetChannelAlbums(Context context,int siteId,int channelId,int pageNum,int pageSize,
+    public static void onGetChannelAlbums(Context context,int siteId,int channelId,int pageNum,int pageSize,
                                      OnGetChannelAlbumListener listener){
         switch (siteId){
             case Site.LETV:
@@ -21,6 +21,7 @@ public class SiteApi {
             default:
                 break;
         }
+
     }
 
 

@@ -1,5 +1,7 @@
 package com.lei.lemonvideo.model;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.lei.lemonvideo.application.AppManager;
 
@@ -11,13 +13,14 @@ public class ErrorInfo {
     public static final int ERROR_TYPE_HTTP = 1;
     public static final int ERROR_TYPE_URL = 2;
     public static final int ERROR_TYPE_FATAL = 3;
+    public static final int ERROR_TYPE_DATA = 4;
 
     //区分实体中不想被序列化的属性，自身包含序列化、反序列化
     @Expose
     int type;//错误类型
 
     @Expose
-    int tag;//标签
+    String tag;//标签
 
     @Expose
     String functionName;
@@ -34,8 +37,11 @@ public class ErrorInfo {
     @Expose
     String exceptionString;
 
+    @Expose
+    String url;
+
     public ErrorInfo(int siteId,int type){
-        site = new Site(siteId, AppManager.getContext());
+        site = new Site(siteId);
         this.type = type;
     }
 
@@ -47,11 +53,11 @@ public class ErrorInfo {
         this.type = type;
     }
 
-    public int getTag() {
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(int tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
@@ -91,7 +97,15 @@ public class ErrorInfo {
         return exceptionString;
     }
 
-    public void setExceptionString(String exceptionString) {
+    public void setExceptionString(@Nullable String exceptionString) {
         this.exceptionString = exceptionString;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

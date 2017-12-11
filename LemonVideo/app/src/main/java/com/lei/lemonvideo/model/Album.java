@@ -1,9 +1,8 @@
 package com.lei.lemonvideo.model;
 
-import android.content.Context;
+
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.lei.lemonvideo.application.AppManager;
 
 /**
@@ -24,7 +23,6 @@ public class Album implements Parcelable {
     private String tip;//提示
     private boolean isCompleted;//专辑是否结束
     private String letvStyle;//乐视特殊字段
-    private Context mContext;
 
     public static final Parcelable.Creator<Album> CREATOR = new Creator<Album>() {
         @Override
@@ -66,7 +64,7 @@ public class Album implements Parcelable {
         this.horImgUrl = parcel.readString();
         this.albumDesc = parcel.readString();
         this.tip = parcel.readString();
-        this.site = new Site(parcel.readInt(),mContext);
+        this.site = new Site(parcel.readInt());
         this.isCompleted = parcel.readByte() != 0;
         this.letvStyle = parcel.readString();
     }
@@ -76,9 +74,8 @@ public class Album implements Parcelable {
         return 0;
     }
 
-    public Album(int siteId,Context context){
-        site = new Site(siteId,context);
-        mContext = context;
+    public Album(int siteId){
+        site = new Site(siteId);
     }
 
     public String getAlbumId() {
@@ -202,7 +199,6 @@ public class Album implements Parcelable {
                 ", tip='" + tip + '\'' +
                 ", isCompleted=" + isCompleted +
                 ", letvStyle='" + letvStyle + '\'' +
-                ", mContext=" + mContext +
                 '}';
     }
 
@@ -213,4 +209,5 @@ public class Album implements Parcelable {
     public Album fromJson(String json){
         return AppManager.getGson().fromJson(json,Album.class);
     }
+
 }

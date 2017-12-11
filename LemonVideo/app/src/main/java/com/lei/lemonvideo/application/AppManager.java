@@ -3,6 +3,8 @@ package com.lei.lemonvideo.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 
@@ -39,6 +41,13 @@ public class AppManager extends Application {
         return mContext.getResources();
     }
 
+
+    public static boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo network = connectivityManager.getActiveNetworkInfo();
+        return network != null && network.isConnected();
+    }
 
 
 }

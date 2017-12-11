@@ -83,7 +83,7 @@ public class DetailListActivity extends BaseActivity {
 
          @Override
          public Fragment getItem(int position) {
-             Fragment fragment = DetailListFragment.newInstance(new Site(1,mContext).getSiteId(),mChannel_id);
+             Fragment fragment = DetailListFragment.newInstance(position + 1,mChannel_id);
              return fragment;
          }
 

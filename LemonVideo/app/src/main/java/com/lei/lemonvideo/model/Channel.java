@@ -1,9 +1,7 @@
 package com.lei.lemonvideo.model;
 
 import android.content.Context;
-
 import com.lei.lemonvideo.R;
-
 import java.io.Serializable;
 
 /**
@@ -26,10 +24,10 @@ public class Channel implements Serializable {
     private String channelName;
     private Context mContext;
 
-    public Channel(int id,Context context){
-        channelId = id;
+    public Channel(int channelId,Context context){
+        this.channelId = channelId;
         mContext = context;
-        switch (id){
+        switch (channelId){
             case SHOW:
                 channelName = mContext.getResources().getString(R.string.channel_tv);
                 break;
@@ -62,6 +60,7 @@ public class Channel implements Serializable {
         }
     }
 
+
     public int getChannelId() {
         return channelId;
     }
@@ -70,5 +69,6 @@ public class Channel implements Serializable {
     public String getChannelName() {
         return channelName;
     }
+
 
 }
