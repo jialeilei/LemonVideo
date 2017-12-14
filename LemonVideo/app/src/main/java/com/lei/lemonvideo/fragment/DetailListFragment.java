@@ -1,6 +1,8 @@
 package com.lei.lemonvideo.fragment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.lei.lemonvideo.R;
 import com.lei.lemonvideo.api.OnGetChannelAlbumListener;
@@ -18,6 +23,7 @@ import com.lei.lemonvideo.model.AlbumList;
 import com.lei.lemonvideo.model.Channel;
 import com.lei.lemonvideo.model.ErrorInfo;
 import com.lei.lemonvideo.model.Site;
+import com.lei.lemonvideo.utils.ImageUtils;
 import com.lei.lemonvideo.widget.PullLoadRecycleView;
 
 public class DetailListFragment extends BaseFragment {
@@ -38,7 +44,6 @@ public class DetailListFragment extends BaseFragment {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public DetailListFragment(){}
-
 
     public static Fragment newInstance(int siteId,int channelId){
         DetailListFragment fragment = new DetailListFragment();
@@ -67,7 +72,6 @@ public class DetailListFragment extends BaseFragment {
             mColums = 3;
             mDetailAdapter.setColumns(mColums);
         }
-
     }
 
 
@@ -142,7 +146,7 @@ public class DetailListFragment extends BaseFragment {
                 });
 
                 for (Album album : albums){
-                    //Log.i(TAG,"album: " + album.toString());
+                    Log.i(TAG, "album: " + album.toString());
                     if (mDetailAdapter != null){
                         mDetailAdapter.setData(album);
                     }
@@ -172,6 +176,8 @@ public class DetailListFragment extends BaseFragment {
 
         private Context mContext;
         private Channel mChannel;
+        private AlbumList albums;
+        private int mColumns;
 
         public DetailListAdapter(Context context,Channel channel){
             mContext = context;
@@ -180,26 +186,73 @@ public class DetailListFragment extends BaseFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View view = ((Activity)mContext).getLayoutInflater().inflate(R.layout.detail_list_item,null);
+            ItemViewHolder viewHolder = new ItemViewHolder(view);
+            view.setTag(viewHolder);
+            return viewHolder;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+            if (albums.size() == 0)return;
+            Album album = albums.get(position);
+            if (holder instanceof ItemViewHolder){
+                ItemViewHolder viewHolder = (ItemViewHolder) holder;
+                viewHolder.albumName.setText(album.getTitle());
+
+                if (album.getTip() != null){
+                    viewHolder.albumTip.setText(album.getTip());
+                }else {
+                    viewHolder.albumPoster.setVisibility(View.GONE);
+                }
+
+                Point point = ImageUtils.getVerPostSize(mContext,mColumns);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x,point.y);
+                viewHolder.albumPoster.setLayoutParams(params);
+                if (album.getVarImgUrl() != null){
+                    ImageUtils.displayImage(viewHolder.albumPoster,album.getVarImgUrl(),point.x,point.y);
+                }
+
+            }
         }
 
         @Override
         public int getItemCount() {
+            if (albums != null && albums.size() > 0){
+                return albums.size();
+            }
             return 0;
         }
 
         public void setColumns(int columns){
             // TODO: 2017/12/11
-
+            mColumns = columns;
         }
 
         public void setData(Album album){
             // TODO: 2017/12/11
+            if (albums == null){
+                albums = new AlbumList();
+            }
+            albums.add(album);
+        }
+
+        public class ItemViewHolder extends RecyclerView.ViewHolder{
+
+            private LinearLayout resultContainer;
+            private ImageView albumPoster;
+            private TextView albumName;
+            private TextView albumTip;
+
+            public ItemViewHolder(View v){
+                super(v);
+                resultContainer = (LinearLayout) v.findViewById(R.id.ll_album_container);
+                albumTip = (TextView) v.findViewById(R.id.tv_album_tip);
+                albumName = (TextView) v.findViewById(R.id.tv_album_name);
+                albumPoster = (ImageView) v.findViewById(R.id.img_album_poster);
+            }
+
 
         }
 
