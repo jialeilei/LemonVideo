@@ -24,7 +24,7 @@ public class ImageUtils {
                         .load(url)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(height, width)
-                        .centerCrop()
+                        .fitCenter()//自适应
                         .error(R.mipmap.ic_launcher)
                         .into(img);
             }else {
@@ -32,20 +32,14 @@ public class ImageUtils {
                         .load(url)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(width, height)
-                        .centerCrop()
+                        .centerCrop()//对图片进行了剪裁
                         .error(R.mipmap.ic_launcher)
                         .into(img);
             }
         }
     }
 
-    public static Point getVerPostSize(Context context,int columns){
-        int width = getScreenWidthPixel(context) / columns;
-        width = width - (int)context.getResources().getDimension(R.dimen.dimen_8dp);
-        int height = Math.round( (float)width / VER_POSTER_RATIO );
-        Point point = new Point(width,height);
-        return point;
-    }
+
 
     private static int getScreenWidthPixel(Context context){
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -55,5 +49,20 @@ public class ImageUtils {
         return point.x;
     }
 
+    public static Point getHorPostSize(Context context, int columns) {
+        return getPoint(context,columns,HOR_POSTER_RATIO);
+    }
+
+    public static Point getVerPostSize(Context context,int columns){
+        return getPoint(context,columns,VER_POSTER_RATIO);
+    }
+
+    private static Point getPoint(Context context,int columns,float ratio){
+        int width = getScreenWidthPixel(context) / columns;
+        width = width - (int)context.getResources().getDimension(R.dimen.dimen_8dp);
+        int height = Math.round( (float)width / ratio );
+        Point point = new Point(width,height);
+        return point;
+    }
 
 }

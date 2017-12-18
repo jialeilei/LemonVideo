@@ -48,7 +48,7 @@ public class PullLoadRecycleView extends LinearLayout {
         mContext = context;
         View view = LayoutInflater.from(mContext).inflate(R.layout.pull_load_recycle_view,null);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeColors(android.R.color.holo_green_light,
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light,
                 android.R.color.holo_blue_light, android.R.color.holo_orange_light);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayoutOnListener());
 
@@ -112,21 +112,19 @@ public class PullLoadRecycleView extends LinearLayout {
                 }
             }
 
-            //?
-            if (mSwipeRefreshLayout.isEnabled()){
-                mSwipeRefreshLayout.setEnabled(true);
-            }else {
-                mSwipeRefreshLayout.setEnabled(false);
-            }
-
             if (!mIsLoadMore
                     && lastItem == totalCount
                     && mSwipeRefreshLayout.isEnabled()
                     && !mIsRefresh
                     && (dx > 0 || dy > 0) ){
                 mIsLoadMore = true;
+                mSwipeRefreshLayout.setEnabled(false);
                 loadMoreData();
+            }else {
+                mSwipeRefreshLayout.setEnabled(true);
             }
+
+
         }
     }
 
@@ -179,6 +177,7 @@ public class PullLoadRecycleView extends LinearLayout {
     }
 
     private OnPullLoadMoreListener mOnPullLoadMoreListener;
+
     public void setOnPullLoadMoreListener(OnPullLoadMoreListener listener){
         mOnPullLoadMoreListener = listener;
     }

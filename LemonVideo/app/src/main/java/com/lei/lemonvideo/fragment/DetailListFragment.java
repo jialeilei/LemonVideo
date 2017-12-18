@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.lei.lemonvideo.R;
 import com.lei.lemonvideo.api.OnGetChannelAlbumListener;
 import com.lei.lemonvideo.api.SiteApi;
@@ -72,9 +74,10 @@ public class DetailListFragment extends BaseFragment {
             mColums = 3;
             mDetailAdapter.setColumns(mColums);
         }
+
+//        mRecycleView.setAdapter(mDetailAdapter);
+//        Toast.makeText(getActivity(),"已加载到最新数据",Toast.LENGTH_LONG).show();
     }
-
-
 
     @Override
     protected int getLayoutId() {
@@ -86,7 +89,7 @@ public class DetailListFragment extends BaseFragment {
         mTvEmpty = bindViewId(R.id.tv_show_empty);
         mTvEmpty.setText(getActivity().getResources().getString(R.string.data_is_loading));
         mRecycleView = bindViewId(R.id.pullLoadRecycleView);
-        mRecycleView.setGridLayout(3);
+        mRecycleView.setGridLayout(mColums);
         mRecycleView.setAdapter(mDetailAdapter);
         mRecycleView.setOnPullLoadMoreListener(new OnPullLoadMoreListener());
     }
@@ -104,11 +107,10 @@ public class DetailListFragment extends BaseFragment {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    reFreshData();
+                    refreshData();
                     mRecycleView.setRefreshComplate();
                 }
             },REFRESH_DURATION);
-
         }
 
         @Override
@@ -123,18 +125,28 @@ public class DetailListFragment extends BaseFragment {
         }
     }
 
+    private void refreshData() {
+        PAGE_NUMBER = 0;
+        loadData();
+        mDetailAdapter = new DetailListAdapter(getActivity(),new Channel(mChannelId,getActivity()));
+        if (mSiteId == Site.LETV){
+            mColums = 2;
+            mDetailAdapter.setColumns(mColums);
+        }else {
+            mColums = 3;
+            mDetailAdapter.setColumns(mColums);
+        }
+        mRecycleView.setAdapter(mDetailAdapter);
+        Toast.makeText(getActivity(),"已加载到最新数据",Toast.LENGTH_LONG).show();
+    }
+
     private void loadMoreData() {
 
     }
 
     private void loadData() {
-
-    }
-
-    private void reFreshData() {
-
         PAGE_NUMBER ++ ;
-        SiteApi.onGetChannelAlbums(getActivity(),mSiteId ,mChannelId , PAGE_NUMBER, PAGE_SIZE, new OnGetChannelAlbumListener() {
+        SiteApi.onGetChannelAlbums(getActivity(), mSiteId, mChannelId, PAGE_NUMBER, PAGE_SIZE, new OnGetChannelAlbumListener() {
             @Override
             public void OnGetChannelAlbumSuccess(final AlbumList albums) {
 
@@ -145,9 +157,9 @@ public class DetailListFragment extends BaseFragment {
                     }
                 });
 
-                for (Album album : albums){
+                for (Album album : albums) {
                     Log.i(TAG, "album: " + album.toString());
-                    if (mDetailAdapter != null){
+                    if (mDetailAdapter != null) {
                         mDetailAdapter.setData(album);
                     }
                 }
@@ -169,7 +181,9 @@ public class DetailListFragment extends BaseFragment {
                 });
             }
         });
+
     }
+
 
 
     class DetailListAdapter extends RecyclerView.Adapter{
@@ -206,12 +220,22 @@ public class DetailListFragment extends BaseFragment {
                 }else {
                     viewHolder.albumPoster.setVisibility(View.GONE);
                 }
+                Point point;
+                if (mColumns == 2){
+                    point = ImageUtils.getHorPostSize(mContext,mColumns);
+                }else {
+                    point = ImageUtils.getVerPostSize(mContext,mColumns);
+                }
 
-                Point point = ImageUtils.getVerPostSize(mContext,mColumns);
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x,point.y);
                 viewHolder.albumPoster.setLayoutParams(params);
+
                 if (album.getVarImgUrl() != null){
                     ImageUtils.displayImage(viewHolder.albumPoster,album.getVarImgUrl(),point.x,point.y);
+                }else if (album.getHorImgUrl() != null){
+                    ImageUtils.displayImage(viewHolder.albumPoster,album.getHorImgUrl(),point.x,point.y);
+                }else {
+                    // TODO: 2017/12/17  
                 }
 
             }

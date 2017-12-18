@@ -11,7 +11,7 @@ public class OkHttpUtils {
 
     private static final String REQUEST_TAG = "okhttp";
 
-    public static Request buildRequest(String url){
+    private static Request buildRequest(String url){
         if (AppManager.isNetworkAvailable()){
             Request request = new Request.Builder()
                     .tag(REQUEST_TAG)
