@@ -41,4 +41,5 @@ public class PositionData {
     public int verticalCenter(){
         return mTop + Height()/2;
     }
+
 }

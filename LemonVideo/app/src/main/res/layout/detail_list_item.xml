@@ -22,7 +22,7 @@
             android:textColor="@color/colorPrimary"
             android:gravity="left"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="8dp"
+            android:paddingBottom="4dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:ellipsize="end"

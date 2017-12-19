@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.lei.lemonvideo.R;
 import com.lei.lemonvideo.api.OnGetChannelAlbumListener;
 import com.lei.lemonvideo.api.SiteApi;

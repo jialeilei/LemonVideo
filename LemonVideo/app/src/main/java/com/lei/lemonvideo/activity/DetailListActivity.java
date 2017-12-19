@@ -3,6 +3,7 @@ package com.lei.lemonvideo.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,12 +17,14 @@ import com.lei.lemonvideo.model.Site;
 import java.util.HashMap;
 
 
-public class DetailListActivity extends BaseActivity {
+public class DetailListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
 
     private final static String CHANNEL_ID = "channelid";
     private int mChannelId;
     private ViewPager mViewPager;
     private SitePagerAdapter mSitePagerAdapter;
+
+    private TabLayout mTablayout;
 
 
     @Override
@@ -39,9 +42,23 @@ public class DetailListActivity extends BaseActivity {
         Channel channel = new Channel(mChannelId,DetailListActivity.this);
         setSupportActionBar();//支持toolbar
         mToolbar.setTitle("title" + channel.getChannelName());
+        //viewPager
         mViewPager = bindViewId(R.id.viewpager_detail);
         mSitePagerAdapter = new SitePagerAdapter(getSupportFragmentManager(),DetailListActivity.this,mChannelId);
         mViewPager.setAdapter(mSitePagerAdapter);
+
+        //tablayout
+        mTablayout = bindViewId(R.id.tablayout_detail_list);
+        mTablayout.setOnTabSelectedListener(this);
+        mTablayout.setupWithViewPager(mViewPager);
+        if (mTablayout.getTabCount() > 0){
+            mTablayout.removeAllTabs();
+        }
+        String[] titles = getResources().getStringArray(R.array.site_list_title);
+        for (int i = 0; i < titles.length; i++) {
+            mTablayout.addTab(mTablayout.newTab().setText(titles[i]));
+        }
+
 
     }
 
@@ -57,6 +74,21 @@ public class DetailListActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 
