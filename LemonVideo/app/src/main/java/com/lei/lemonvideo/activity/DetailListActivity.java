@@ -1,6 +1,5 @@
 package com.lei.lemonvideo.activity;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -15,7 +14,6 @@ import com.lei.lemonvideo.fragment.DetailListFragment;
 import com.lei.lemonvideo.model.Channel;
 import com.lei.lemonvideo.model.Site;
 import java.util.HashMap;
-
 
 public class DetailListActivity extends BaseActivity implements TabLayout.OnTabSelectedListener{
 

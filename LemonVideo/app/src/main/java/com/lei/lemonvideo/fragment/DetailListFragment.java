@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.lei.lemonvideo.R;
+import com.lei.lemonvideo.activity.AlbumDetailActivity;
 import com.lei.lemonvideo.api.OnGetChannelAlbumListener;
 import com.lei.lemonvideo.api.SiteApi;
 import com.lei.lemonvideo.model.Album;
@@ -49,7 +50,7 @@ public class DetailListFragment extends BaseFragment {
     public static Fragment newInstance(int siteId,int channelId){
         DetailListFragment fragment = new DetailListFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(SITE_ID,siteId);
+        bundle.putInt(SITE_ID, siteId);
         bundle.putInt(CHANNEL_ID, channelId);
         fragment.setArguments(bundle);
         return fragment;
@@ -109,7 +110,7 @@ public class DetailListFragment extends BaseFragment {
                     refreshData();
                     mRecycleView.setRefreshComplate();
                 }
-            },REFRESH_DURATION);
+            }, REFRESH_DURATION);
         }
 
         @Override
@@ -209,7 +210,7 @@ public class DetailListFragment extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
             if (albums.size() == 0)return;
-            Album album = albums.get(position);
+            final Album album = albums.get(position);
             if (holder instanceof ItemViewHolder){
                 ItemViewHolder viewHolder = (ItemViewHolder) holder;
                 viewHolder.albumName.setText(album.getTitle());
@@ -236,6 +237,19 @@ public class DetailListFragment extends BaseFragment {
                 }else {
                     // TODO: 2017/12/17  
                 }
+
+                viewHolder.resultContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mChannelId == Channel.DOCUMENTARY || mChannelId == Channel.MOVE
+                                ||mChannelId == Channel.VARIETY || mChannelId == Channel.MUSIC){
+                            //没有剧集
+                            AlbumDetailActivity.launch(getActivity(),album,0,true);
+                        }else {
+                            AlbumDetailActivity.launch(getActivity(),album);
+                        }
+                    }
+                });
 
             }
         }
