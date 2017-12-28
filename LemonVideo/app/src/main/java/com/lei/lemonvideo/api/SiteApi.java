@@ -1,6 +1,8 @@
 package com.lei.lemonvideo.api;
 
 import android.content.Context;
+
+import com.lei.lemonvideo.model.Album;
 import com.lei.lemonvideo.model.Channel;
 import com.lei.lemonvideo.model.Site;
 
@@ -22,6 +24,19 @@ public class SiteApi {
                 break;
         }
 
+    }
+
+    public static void onGetAlbumDetail(int siteId,Album album,OnGetAlbumDetailListener listener){
+        switch (siteId){
+            case Site.LETV:
+                new LetvApi().onGetAlbumDetail(album,listener);
+                break;
+            case Site.SOHU:
+                new SohuApi().onGetAlbumDetail(album, listener);
+                break;
+            default:
+                break;
+        }
     }
 
 

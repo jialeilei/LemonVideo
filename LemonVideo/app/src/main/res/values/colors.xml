@@ -7,5 +7,6 @@
     <color name="redPrimary">#ff6161</color>
     <color name="transparentWhite">#99ffffff</color>
     <color name="transparentBlack">#33ffffff</color>
+    <color name="grey_light">#aaaaaa</color>
     <color name="grey">#666666</color>
 </resources>

@@ -184,4 +184,7 @@ public class LetvApi extends BaseSiteApi{
     }
 
 
+    public void onGetAlbumDetail(Album album, OnGetAlbumDetailListener listener) {
+
+    }
 }

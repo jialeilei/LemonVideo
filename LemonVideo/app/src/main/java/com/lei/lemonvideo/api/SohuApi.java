@@ -24,6 +24,10 @@ public class SohuApi extends BaseSiteApi {
     private String test = "http://api.tv.sohu.com/v4/search/channel.json" +
             "?cid=2&o=1&plat=6&poid=1&api_key=9854b2afa779e1a6bff1962447a09dbd&" +
             "sver=6.2.0&sysver=4.4.2&partner=47&page=0&page_size=30";
+
+    private static final String API_KEY = "";
+    private static final String API_ALBUM_INFO = "";
+
     private static final String API_CHANNEL_ALBUM_FORMAT = "http://api.tv.sohu.com/v4/search/channel.json" +
             "?cid=%s&o=1&plat=6&poid=1&api_key=9854b2afa779e1a6bff1962447a09dbd&" +
             "sver=6.2.0&sysver=4.4.2&partner=47&page=%s&page_size=%s";
@@ -68,11 +72,11 @@ public class SohuApi extends BaseSiteApi {
                 Result result = AppManager.getGson().
                         fromJson(response.body().string(), Result.class);
                 AlbumList list = toConvertAlbumList(result);
-                if (list != null){
-                    if (list.size() > 0 && listener != null){
+                if (list != null) {
+                    if (list.size() > 0 && listener != null) {
                         listener.OnGetChannelAlbumSuccess(list);
                     }
-                }else {
+                } else {
                     ErrorInfo info = buildErrorInfo(url, "doGetChannelAlbumsByUrl", null, ErrorInfo.ERROR_TYPE_DATA);
                     listener.OnGetChannelAlbumFail(info);
                 }
@@ -143,4 +147,41 @@ public class SohuApi extends BaseSiteApi {
         return channelId;
     }
 
+    public void onGetAlbumDetail(final Album album, final OnGetAlbumDetailListener listener) {
+
+        final String url = API_ALBUM_INFO + album.getAlbumId() + ".json?" + API_KEY;
+        OkHttpUtils.excute(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (listener != null) {
+                    ErrorInfo info = buildErrorInfo(url, "onGetAlbumDetail", e, ErrorInfo.ERROR_TYPE_URL);
+                    listener.OnGetAlbumDetailFail(info);
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (!response.isSuccessful()) {
+                    ErrorInfo info = buildErrorInfo(url, "onGetAlbumDetail", null, ErrorInfo.ERROR_TYPE_URL);
+                    listener.OnGetAlbumDetailFail(info);
+                    return;
+                }
+                //data
+                Result result = AppManager.getGson().fromJson(response.body().string(),Result.class);
+                if (result.getData() != null){
+                    if (result.getResultAlbum().getTotalVideoCount() > 0){
+                        album.setVideoTotal(result.getResultAlbum().getTotalVideoCount());
+                    }else {
+                        album.setVideoTotal(result.getResultAlbum().getLatestVideoCount());
+                    }
+                }
+
+                if (listener != null){
+                    listener.OnGetAlbumDetailSuccess(album);
+                }
+
+            }
+        });
+    }
 }

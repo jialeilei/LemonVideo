@@ -17,6 +17,12 @@ public class ImageUtils {
     private static final float VER_POSTER_RATIO = 0.73f;//0.73
     private static final float HOR_POSTER_RATIO = 1.5f;
 
+    public static void displayImage(ImageView img,String url){
+        if (img != null && url != null){
+            Glide.with(img.getContext()).load(url).into(img);
+        }
+    }
+
     public static void displayImage(ImageView img,String url,int width,int height){
         if (img != null && url != null && width > 0 && height > 0){
             if (width > height){

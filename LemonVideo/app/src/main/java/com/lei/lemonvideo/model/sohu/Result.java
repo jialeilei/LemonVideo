@@ -13,8 +13,11 @@ public class Result {
     @Expose
     private String statusText;
 
-    @Expose
+    @Expose//列表
     private Data data;
+
+    @Expose//详情
+    private ResultAlbum resultAlbum;
 
     public long getStatus() {
         return status;
@@ -38,5 +41,13 @@ public class Result {
 
     public void setStatusText(String statusText) {
         this.statusText = statusText;
+    }
+
+    public ResultAlbum getResultAlbum() {
+        return resultAlbum;
+    }
+
+    public void setResultAlbum(ResultAlbum resultAlbum) {
+        this.resultAlbum = resultAlbum;
     }
 }

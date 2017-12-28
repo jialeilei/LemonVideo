@@ -39,6 +39,15 @@ public class ResultAlbum {
     @Expose
     private String albumId;
 
+    //详情
+    @SerializedName("latest_video_count")
+    @Expose
+    private int latestVideoCount;
+
+    @SerializedName("total_video_count")
+    @Expose
+    private int totalVideoCount;
+
     public String getTvDesc() {
         return tvDesc;
     }
@@ -103,4 +112,19 @@ public class ResultAlbum {
         this.albumId = albumId;
     }
 
+    public int getLatestVideoCount() {
+        return latestVideoCount;
+    }
+
+    public void setLatestVideoCount(int latestVideoCount) {
+        this.latestVideoCount = latestVideoCount;
+    }
+
+    public int getTotalVideoCount() {
+        return totalVideoCount;
+    }
+
+    public void setTotalVideoCount(int totalVideoCount) {
+        this.totalVideoCount = totalVideoCount;
+    }
 }
