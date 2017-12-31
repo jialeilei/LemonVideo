@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Created by lei on 2017/12/8.
  */
-public class Result {
+public class DetailResult {
 
     @Expose
     private long status;
@@ -13,8 +13,8 @@ public class Result {
     @Expose
     private String statusText;
 
-    @Expose//列表
-    private Data data;
+    @Expose//详情
+    private ResultAlbum data;
 
     public long getStatus() {
         return status;
@@ -22,14 +22,6 @@ public class Result {
 
     public void setStatus(long status) {
         this.status = status;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
     }
 
     public String getStatusText() {
@@ -40,4 +32,11 @@ public class Result {
         this.statusText = statusText;
     }
 
+    public ResultAlbum getData() {
+        return data;
+    }
+
+    public void setData(ResultAlbum data) {
+        this.data = data;
+    }
 }

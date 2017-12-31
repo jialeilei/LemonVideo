@@ -4,8 +4,11 @@ package com.lei.lemonvideo.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import com.lei.lemonvideo.R;
 import com.lei.lemonvideo.api.OnGetAlbumDetailListener;
 import com.lei.lemonvideo.api.SiteApi;
+import com.lei.lemonvideo.fragment.AlbumPlayGridFragment;
 import com.lei.lemonvideo.model.Album;
 import com.lei.lemonvideo.model.ErrorInfo;
 import com.lei.lemonvideo.utils.ImageUtils;
@@ -25,9 +29,11 @@ import com.lei.lemonvideo.utils.ImageUtils;
  */
 public class AlbumDetailActivity extends BaseActivity {
 
+    private static final String TAG = AlbumDetailActivity.class.getSimpleName();
     private Album mAlbum;
     private int mVideoNo;
     private boolean mIsShowDesc;
+    private Fragment mFragment;
 
     private ImageView mAlbumImg;
     private TextView mAlbumName;
@@ -88,7 +94,19 @@ public class AlbumDetailActivity extends BaseActivity {
 
         SiteApi.onGetAlbumDetail(1, mAlbum, new OnGetAlbumDetailListener() {
             @Override
-            public void OnGetAlbumDetailSuccess(Album album) {
+            public void OnGetAlbumDetailSuccess(final Album album) {
+
+                Log.i(TAG, "onGetAlbumDetail  total: " + album.getVideoTotal());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFragment = AlbumPlayGridFragment.newInstance(album, mIsShowDesc, 0);
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.fragment_container,mFragment);
+                        ft.commit();
+                        getSupportFragmentManager().executePendingTransactions();
+                    }
+                });
 
             }
 

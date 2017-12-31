@@ -61,10 +61,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/dimen_8dp"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -93,6 +89,12 @@
             </RelativeLayout>
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/dimen_8dp"/>
 
     </FrameLayout>
 

@@ -131,10 +131,10 @@ public class LetvApi extends BaseSiteApi{
                     jsonObject = new JSONObject(json);
 
                     JSONObject bodyJson = jsonObject.optJSONObject("body");
-                    if (bodyJson.optInt("album_count") > 0){
+                    if (bodyJson.optInt("album_count") > 0) {
                         AlbumList list = new AlbumList();
                         JSONArray albumJsonList = bodyJson.optJSONArray("album_list");
-                        for (int i = 0; i < albumJsonList.length(); i++){
+                        for (int i = 0; i < albumJsonList.length(); i++) {
                             Album album = new Album(Site.LETV);
                             JSONObject albumJson = albumJsonList.getJSONObject(i);
                             album.setAlbumId(albumJson.getString("aid"));
@@ -187,4 +187,9 @@ public class LetvApi extends BaseSiteApi{
     public void onGetAlbumDetail(Album album, OnGetAlbumDetailListener listener) {
 
     }
+
+    public void onGetVideo(Album album, int pageSize, int pageNo, OnGetVideoListener listener) {
+
+    }
+
 }

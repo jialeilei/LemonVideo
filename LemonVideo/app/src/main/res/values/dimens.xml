@@ -10,4 +10,5 @@
     <dimen name="dimen_10dp">10px</dimen>
     <dimen name="dimen_8dp">8px</dimen>
     <dimen name="dimen_4dp">4px</dimen>
+    <dimen name="dimen_80dp">80px</dimen>
 </resources>

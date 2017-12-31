@@ -1,14 +1,20 @@
 package com.lei.lemonvideo.api;
 
 
+import android.util.Log;
+
 import com.lei.lemonvideo.application.AppManager;
 import com.lei.lemonvideo.model.Album;
 import com.lei.lemonvideo.model.AlbumList;
 import com.lei.lemonvideo.model.Channel;
 import com.lei.lemonvideo.model.ErrorInfo;
 import com.lei.lemonvideo.model.Site;
+import com.lei.lemonvideo.model.VideoList;
+import com.lei.lemonvideo.model.sohu.DetailResult;
 import com.lei.lemonvideo.model.sohu.Result;
 import com.lei.lemonvideo.model.sohu.ResultAlbum;
+import com.lei.lemonvideo.model.sohu.Video;
+import com.lei.lemonvideo.model.sohu.VideoResult;
 import com.lei.lemonvideo.utils.OkHttpUtils;
 import java.io.IOException;
 import okhttp3.Call;
@@ -25,12 +31,17 @@ public class SohuApi extends BaseSiteApi {
             "?cid=2&o=1&plat=6&poid=1&api_key=9854b2afa779e1a6bff1962447a09dbd&" +
             "sver=6.2.0&sysver=4.4.2&partner=47&page=0&page_size=30";
 
-    private static final String API_KEY = "";
-    private static final String API_ALBUM_INFO = "";
+
+    private final static String API_KEY = "plat=6&poid=1&api_key=9854b2afa779e1a6bff1962447a09dbd&sver=6.2.0&sysver=4.4.2&partner=47";
+    private final static String API_ALBUM_INFO = "http://api.tv.sohu.com/v4/album/info/";
 
     private static final String API_CHANNEL_ALBUM_FORMAT = "http://api.tv.sohu.com/v4/search/channel.json" +
             "?cid=%s&o=1&plat=6&poid=1&api_key=9854b2afa779e1a6bff1962447a09dbd&" +
             "sver=6.2.0&sysver=4.4.2&partner=47&page=%s&page_size=%s";
+
+    //
+    private final static String API_ALBUM_VIDOES_FORMAT = "http://api.tv.sohu.com/v4/album/videos/%s.json?page=%s&page_size=%s&order=0&site=1&with_trailer=1&plat=6&poid=1&api_key=9854b2afa779e1a6bff1962447a09dbd&sver=6.2.0&sysver=4.4.2&partner=47";
+
 
     private static final String TAG = SohuApi.class.getSimpleName();
     public static final int SOHU_CHANNELID_MOVE = 1;//搜狐电影频道
@@ -168,12 +179,12 @@ public class SohuApi extends BaseSiteApi {
                     return;
                 }
                 //data
-                Result result = AppManager.getGson().fromJson(response.body().string(),Result.class);
+                DetailResult result = AppManager.getGson().fromJson(response.body().string(),DetailResult.class);
                 if (result.getData() != null){
-                    if (result.getResultAlbum().getTotalVideoCount() > 0){
-                        album.setVideoTotal(result.getResultAlbum().getTotalVideoCount());
+                    if (result.getData().getTotalVideoCount() > 0){
+                        album.setVideoTotal(result.getData().getTotalVideoCount());
                     }else {
-                        album.setVideoTotal(result.getResultAlbum().getLatestVideoCount());
+                        album.setVideoTotal(result.getData().getLatestVideoCount());
                     }
                 }
 
@@ -184,4 +195,52 @@ public class SohuApi extends BaseSiteApi {
             }
         });
     }
+
+    public void onGetVideo(Album album, int pageSize, int pageNo,final OnGetVideoListener listener) {
+
+        final String url = String.format(API_ALBUM_VIDOES_FORMAT,album.getAlbumId(),pageNo,pageSize);
+        OkHttpUtils.excute(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (listener != null) {
+                    ErrorInfo info = buildErrorInfo(url, "onGetVideo", e, ErrorInfo.ERROR_TYPE_URL);
+                    listener.OnGetVideoFail(info);
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    ErrorInfo info = buildErrorInfo(url, "onGetVideo", null, ErrorInfo.ERROR_TYPE_URL);
+                    listener.OnGetVideoFail(info);
+                    return;
+                }
+                VideoResult result = AppManager.getGson().fromJson(response.body().string(),VideoResult.class);
+                if (result != null){
+                    Log.i(TAG, "onGetVideo " + result.toString());
+                        if (result.getData() != null){
+                            VideoList videoList = new VideoList();
+                            for (Video video : result.getData().getVideoList()){
+                                Video v = new Video();
+                                v.setHorHighPic(video.getHorHighPic());
+                                v.setVerHighPic(video.getVerHighPic());
+                                v.setTitle(video.getTitle());
+                                v.setVid(video.getVid());
+                                v.setVideoName(video.getVideoName());
+                                videoList.add(v);
+                            }
+                            if (listener != null){
+                                listener.OnGetVideoSuccess(videoList);
+                            }
+                        }
+                }
+
+
+
+            }
+        });
+
+    }
+
+
 }
