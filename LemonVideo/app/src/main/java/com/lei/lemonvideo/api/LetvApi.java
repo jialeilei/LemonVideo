@@ -9,6 +9,7 @@ import com.lei.lemonvideo.model.Channel;
 import com.lei.lemonvideo.model.ErrorInfo;
 import com.lei.lemonvideo.model.Site;
 import com.lei.lemonvideo.model.sohu.Result;
+import com.lei.lemonvideo.model.sohu.Video;
 import com.lei.lemonvideo.utils.OkHttpUtils;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -192,4 +193,14 @@ public class LetvApi extends BaseSiteApi{
 
     }
 
+
+    /**
+     *
+     * @param siteId
+     * @param video
+     * @param listener
+     */
+    public void onGetVideoPlayUrl(int siteId, Video video, OnGetVideoPlayUrlListener listener) {
+
+    }
 }

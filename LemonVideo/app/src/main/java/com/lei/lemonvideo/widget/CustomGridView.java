@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import java.util.ArrayList;
@@ -14,22 +15,93 @@ import java.util.List;
  */
 public class CustomGridView extends GridView {
 
+
     private Context mContext;
     private List<ViewHolder> mFooterViewList = new ArrayList<>();
+    private boolean isLoading;
+    private boolean hasMoreItem;
+    private OnLoadMoreListener mOnLoadMoreListener = null;
+    private OnScrolledListener  mOnScrolledListener = null;
+
+
+    public interface OnLoadMoreListener{
+        void onLoadMoreItems();
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener listener){
+        this.mOnLoadMoreListener = listener;
+    }
+
+    public interface OnScrolledListener{
+        void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount);
+    }
+
+    public void setOnScrollListener(OnScrolledListener listener){
+        this.mOnScrolledListener = listener;
+    }
+
+
 
     public CustomGridView(Context context) {
         super(context);
-        mContext = context;
+        initView(context);
     }
 
     public CustomGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initView(context);
     }
 
-    public CustomGridView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    private void initView(Context context) {
+        mContext = context;
+        isLoading = false;
+        //添加loadingView
+        LoadingView loadingView = new LoadingView(mContext);
+        addFooterView(loadingView);
+
+        setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (mOnScrolledListener != null){
+                    mOnScrolledListener.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount);
+                }
+
+                if (totalItemCount > 0){
+                    int lastViewVisible = firstVisibleItem + visibleItemCount;
+                    if (!isLoading && hasMoreItem && lastViewVisible == totalItemCount){
+                        if (mOnLoadMoreListener != null){
+                            mOnLoadMoreListener.onLoadMoreItems();
+                        }
+                    }
+                }
+
+            }
+        });
+
+
     }
 
+    public boolean isHasMoreItem() {
+        return hasMoreItem;
+    }
+
+    public void setHasMoreItem(boolean hasMoreItem) {
+        this.hasMoreItem = hasMoreItem;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void isLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+    }
 
     /**
      * 添加 footerView

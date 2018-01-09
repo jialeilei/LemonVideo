@@ -235,10 +235,18 @@ public class SohuApi extends BaseSiteApi {
                         }
                 }
 
-
-
             }
         });
+
+    }
+
+    /**
+     *
+     * @param siteId
+     * @param video
+     * @param listener
+     */
+    public void onGetVideoPlayUrl(int siteId, Video video, OnGetVideoPlayUrlListener listener) {
 
     }
 

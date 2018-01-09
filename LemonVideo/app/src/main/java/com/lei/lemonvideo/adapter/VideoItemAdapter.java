@@ -1,6 +1,7 @@
 package com.lei.lemonvideo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class VideoItemAdapter extends BaseAdapter {
     private int mTotalCount;
     private OnVideoSelectedListener mListener;
     private VideoList mVideoList = new VideoList();
+    private boolean isShowTitleContent = false;
 
     public VideoItemAdapter(Context context,int totalCount,OnVideoSelectedListener listener){
         mContext = context;
@@ -46,7 +48,7 @@ public class VideoItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.video_item,null);
@@ -58,6 +60,23 @@ public class VideoItemAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        if (getIsShowTitleContent()){
+            if (!TextUtils.isEmpty(getItem(position).getVideoName())){
+                holder.btnVideo.setText(getItem(position).getVideoName());
+            }else {
+                holder.btnVideo.setText(String.valueOf(position + 1));
+            }
+        }else {
+            holder.btnVideo.setText(String.valueOf(position + 1));
+        }
+        holder.btnVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null){
+                    mListener.onVideoSelected(getItem(position),position);
+                }
+            }
+        });
         return convertView;
     }
 
@@ -68,6 +87,15 @@ public class VideoItemAdapter extends BaseAdapter {
     class ViewHolder{
         LinearLayout videoContainer;
         Button btnVideo;
+    }
+
+    //显示每集、每期的内容
+    public void setIsShowTitleContent(boolean isShow){
+        isShowTitleContent = isShow;
+    }
+
+    private boolean getIsShowTitleContent(){
+        return isShowTitleContent;
     }
 
 }

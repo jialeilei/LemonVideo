@@ -21,6 +21,7 @@ import com.lei.lemonvideo.api.SiteApi;
 import com.lei.lemonvideo.fragment.AlbumPlayGridFragment;
 import com.lei.lemonvideo.model.Album;
 import com.lei.lemonvideo.model.ErrorInfo;
+import com.lei.lemonvideo.model.sohu.Video;
 import com.lei.lemonvideo.utils.ImageUtils;
 
 
@@ -33,8 +34,7 @@ public class AlbumDetailActivity extends BaseActivity {
     private Album mAlbum;
     private int mVideoNo;
     private boolean mIsShowDesc;
-    private Fragment mFragment;
-
+    private AlbumPlayGridFragment mFragment;
     private ImageView mAlbumImg;
     private TextView mAlbumName;
     private TextView mAlbumDirector;
@@ -51,7 +51,7 @@ public class AlbumDetailActivity extends BaseActivity {
     protected void initView() {
         mAlbum = getIntent().getParcelableExtra("album");
         mVideoNo = getIntent().getIntExtra("videoNo", 0);
-        mIsShowDesc = getIntent().getBooleanExtra("isShowDesc", true);
+        mIsShowDesc = getIntent().getBooleanExtra("isShowDesc", false);
 
         mAlbumImg = bindViewId(R.id.iv_album_image);
         mAlbumName = bindViewId(R.id.tv_album_name);
@@ -101,10 +101,12 @@ public class AlbumDetailActivity extends BaseActivity {
                     @Override
                     public void run() {
                         mFragment = AlbumPlayGridFragment.newInstance(album, mIsShowDesc, 0);
+                        mFragment.setOnPlayVideoSelectedListener(mPlayVideoSelectedListener);
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.fragment_container,mFragment);
+                        ft.replace(R.id.fragment_container, mFragment);
                         ft.commit();
-                        getSupportFragmentManager().executePendingTransactions();
+                        //getSupportFragmentManager().executePendingTransactions();
+                        getFragmentManager().executePendingTransactions();
                     }
                 });
 
@@ -192,4 +194,13 @@ public class AlbumDetailActivity extends BaseActivity {
         intent.putExtra("album",album);
         activity.startActivity(intent);
     }
+
+    private AlbumPlayGridFragment.OnPlayVideoSelectedListener mPlayVideoSelectedListener = new AlbumPlayGridFragment.OnPlayVideoSelectedListener() {
+        @Override
+        public void onPlayVideoSelected(Video video, int position) {
+
+            SiteApi.onGetVideoPlayUrl();
+        }
+    };
+
 }
